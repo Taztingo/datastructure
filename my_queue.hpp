@@ -1,8 +1,7 @@
 #ifndef __MY_QUEUE__
 	#define __MY_QUEUE__
 
-	#include "my_node.h"
-	#include "my_list.h"
+	#include "my_list.hpp"
 
 	template <typename T>
 	class MyQueue {

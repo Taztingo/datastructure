@@ -5,7 +5,7 @@
 		#define NULL 0
 	#endif
 
-	#include "my_node.h"
+	#include "my_node.hpp"
 
 	template <typename T>
 	class MyList {
