@@ -17,5 +17,6 @@ Copying:
 	This is free to use, and acknowledgement is not required but appreciated.
 
 Future:
-	Implement sort and = for my_list.h
-	Implement iterator capability
+	Sort and = for my_list.h
+	Iterator capability
+	Rest of data structures
