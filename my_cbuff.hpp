@@ -11,11 +11,13 @@
 			explicit MyCBuff(size_t size = default_size);
 			~MyCBuff();
 
-			size_t	size() const;
-			bool 		empty() const;
-			int			top() const;
-			void		pop();
-			void		push(int);
+			size_t			size() const;
+			bool 				empty() const;
+			int					top() const;
+			void				pop();
+			void				push(int);
+			int &				operator[](size_t);
+			int const & operator[](size_t) const;
 
 		private:
 			int* 		array;
@@ -89,4 +91,15 @@
 	}
 	////////////////////////////////////
 
+	////////////////////////////////////
+	int & MyCBuff::operator[](size_t index) {
+		return array[index];
+	}
+	////////////////////////////////////
+	
+	////////////////////////////////////
+	const int & MyCBuff::operator[](size_t index) const {
+		return array[index];
+	}
+	////////////////////////////////////
 #endif
