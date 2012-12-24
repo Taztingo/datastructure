@@ -4,7 +4,7 @@ using namespace std;
 
 
 int main() {
-	MyCBuff buff(3);
+	MyCBuff<int> buff(3);
 	
 	//Initial trace
 	cout << "The size is: " << buff.size() << "\n";
