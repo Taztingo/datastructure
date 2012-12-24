@@ -7,7 +7,7 @@ Author:
 
 Thanks:
 	Thank you cplusplus.com for having excellent documentation of the c++
-	data structures.
+	data structures. accu.org/index.php/journals/389 was also a great help for learning how to move towards the STL style.
 
 Install:
 	Simply include the header file in any c++ program.

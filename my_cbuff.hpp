@@ -5,33 +5,46 @@
 		#define size_t unsigned int
 	#endif
 
+	#ifndef ptrdiff_t
+		#define ptrdiff_t int
+	#endif
+
 	template <typename T>
 	class MyCBuff {
+		
+		typedef T 				value_type;
+		typedef T* 				pointer;
+		typedef const T*	const_pointer;
+		typedef T&				reference;
+		typedef const T&	const_reference;
+		typedef size_t		size_type;
+		typedef ptrdiff_t	difference_type;
+		
 		public:
 			enum { default_size = 100 };
-			explicit MyCBuff(size_t size = default_size);
+			explicit MyCBuff(size_type size = default_size);
 			~MyCBuff();
 
-			size_t		size() const;
-			bool 			empty() const;
-			T					top() const;
-			void			pop();
-			void			push(T);
-			T &				operator[](size_t);
-			T const & operator[](size_t) const;
+			size_type					size() const;
+			bool 							empty() const;
+			value_type				top() const;
+			void							pop();
+			void							push(value_type);
+			reference					operator[](size_type);
+			const_reference 	operator[](size_type) const;
 
 		private:
-			T* 			array_;
-			size_t	length_;
-			size_t 	size_;
-			T			 	head_;
-			T				tail_;
+			pointer 			array_;
+			size_type			length_;
+			size_type 		size_;
+			value_type		head_;
+			value_type		tail_;
 	};
 	
 	////////////////////////////////////
 	template <typename T>
-	MyCBuff<T>::MyCBuff(size_t size) {
-		array_ = new T[size];
+	MyCBuff<T>::MyCBuff(size_type size) {
+		array_ = new value_type[size];
 		size_ = 0;
 		head_ = 0;
 		tail_ = 0;
@@ -50,7 +63,7 @@
 	
 	////////////////////////////////////
 	template <typename T>
-	size_t MyCBuff<T>::size() const {
+	typename MyCBuff<T>::size_type MyCBuff<T>::size() const {
 		return size_;
 	}
 	////////////////////////////////////
@@ -67,7 +80,7 @@
 	
 	////////////////////////////////////
 	template <typename T>
-	T MyCBuff<T>::top() const {
+	typename MyCBuff<T>::value_type MyCBuff<T>::top() const {
 		return array_[0];
 	}
 	////////////////////////////////////
@@ -89,7 +102,7 @@
 
 	////////////////////////////////////
 	template <typename T>
-	void MyCBuff<T>::push(T newValue) {
+	void MyCBuff<T>::push(value_type newValue) {
 		if(size_ == length_)
 			pop();
 
@@ -103,14 +116,14 @@
 
 	////////////////////////////////////
 	template <typename T>
-	T & MyCBuff<T>::operator[](size_t index) {
+	typename MyCBuff<T>::reference MyCBuff<T>::operator[](size_type index) {
 		return array_[index];
 	}
 	////////////////////////////////////
 	
 	////////////////////////////////////
 	template <typename T>
-	const T & MyCBuff<T>::operator[](size_t index) const {
+	typename MyCBuff<T>::const_reference MyCBuff<T>::operator[](size_type index) const {
 		return array_[index];
 	}
 	////////////////////////////////////
