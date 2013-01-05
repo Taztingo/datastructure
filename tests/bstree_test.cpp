@@ -18,40 +18,45 @@ int main() {
 	tree.add(75);
 	tree.add(90);
 	tree.add(3);
-	tree.traverse();
+	tree.preorder();
 	cout << "\n";
-	tree.traverse_reverse();
+	tree.inorder();
 	cout << "\n";
+	tree.postorder();
+	cout << "\n";
+
+	//Find height of tree
+	cout << "The height of the tree is " << tree.height() << "\n";
 
 	//Remove a node with no children
 	cout << "Removing 3\n";
 	tree.remove(3);
-	tree.traverse();
+	tree.inorder();
 	cout << "\n";
 	tree.add(3);
 
 	//Remove a node with only left child
 	cout << "Adding 55\n";
 	tree.add(55);
-	tree.traverse();
+	tree.inorder();
 	cout << "\nRemoving 55\n";
 	tree.remove(55);
-	tree.traverse();
+	tree.inorder();
 	cout << "\n";
 
 	//Remove a node with only right child
 	cout << "Adding 65\n";
 	tree.add(65);
-	tree.traverse();
+	tree.inorder();
 	cout << "\nRemoving 65\n";
 	tree.remove(65);
-	tree.traverse();
+	tree.inorder();
 	cout << "\n";
 
 	//Remove a node with two children
 	cout << "Removing 70\n";
 	tree.remove(70);
-	tree.traverse();
+	tree.inorder();
 	cout << "\n";
 
 	//Find root
@@ -81,5 +86,5 @@ int main() {
 	//Clear all nodes
 	cout << "Removing all nodes\n";
 	tree.clear();
-	tree.traverse();
+	tree.inorder();
 }

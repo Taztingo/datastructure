@@ -8,16 +8,19 @@
 			MyNode<T>* root_;
 			void	delete_node(MyNode<T>*, MyNode<T>*, MyNode<T>*, bool = false);
 			void	add_node(MyNode<T>*, MyNode<T>*);
+			int		height_helper(MyNode<T>*);
 			
 		public:
 			MyBSTree();
 			~MyBSTree();
-			void add(T, MyNode<T>* = NULL);
-			void remove(T, MyNode<T>* = NULL, MyNode<T>* = NULL);
-			void traverse(MyNode<T>* = NULL);
-			void traverse_reverse(MyNode<T>* = NULL);
-			void clear(MyNode<T>*  = NULL);
-			bool exists(T, MyNode<T>* = NULL);
+			void 	add(T, MyNode<T>* = NULL);
+			void 	remove(T, MyNode<T>* = NULL, MyNode<T>* = NULL);
+			void	preorder(MyNode<T>* = NULL);
+			void 	inorder(MyNode<T>* = NULL);
+			void 	postorder(MyNode<T>* = NULL);
+			void 	clear(MyNode<T>*  = NULL);
+			bool 	exists(T, MyNode<T>* = NULL);
+			int  	height();
 	};
 
 	/////////////////////////////////
@@ -151,18 +154,36 @@
 	/////////////////////////////////
 	#include <iostream>
 	template <typename T>
-	void MyBSTree<T>::traverse(MyNode<T>* node) {
+	void MyBSTree<T>::preorder(MyNode<T>* node) {
+		if(root_) {
+			if(!node)
+				node = root_;
+			
+			std::cout << node->getData() << " ";	
+			
+			if(node->getLeft())
+				preorder(node->getLeft());
+			
+			if(node->getRight())
+				preorder(node->getRight());
+		}
+	}
+	/////////////////////////////////
+	/////////////////////////////////
+	#include <iostream>
+	template <typename T>
+	void MyBSTree<T>::inorder(MyNode<T>* node) {
 		if(root_) {
 			if(!node)
 				node = root_;
 			
 			if(node->getLeft())
-				traverse(node->getLeft());
+				inorder(node->getLeft());
 				
 			std::cout << node->getData() << " ";	
 			
 			if(node->getRight())
-				traverse(node->getRight());
+				inorder(node->getRight());
 		}
 	}
 	/////////////////////////////////
@@ -170,18 +191,18 @@
 	/////////////////////////////////
 	#include <iostream>
 	template <typename T>
-	void MyBSTree<T>::traverse_reverse(MyNode<T>* node) {
+	void MyBSTree<T>::postorder(MyNode<T>* node) {
 		if(root_) {
 			if(!node)
 				node = root_;
 			
-			if(node->getRight())
-				traverse_reverse(node->getRight());
-				
-			std::cout << node->getData() << " ";	
-			
 			if(node->getLeft())
-				traverse_reverse(node->getLeft());
+				postorder(node->getLeft());
+			
+			if(node->getRight())
+				postorder(node->getRight());
+			
+			std::cout << node->getData() << " ";	
 		}
 	}
 	/////////////////////////////////
@@ -229,4 +250,29 @@
 		return false;
 	}
 	/////////////////////////////////
+
+	/////////////////////////////////
+	template <typename T>
+	int MyBSTree<T>::height() {
+		return height_helper(root_);
+	}
+	/////////////////////////////////
+
+	/////////////////////////////////
+	template <typename T>
+	int MyBSTree<T>::height_helper(MyNode<T>* node) {
+		if(node == NULL)
+			return 0;
+		else {
+			int left = height_helper(node->getLeft());
+			int right = height_helper(node->getRight());
+
+			if(left >= right)
+				return left + 1;
+			else
+				return right + 1;
+		}
+	}
+	/////////////////////////////////
+
 #endif
