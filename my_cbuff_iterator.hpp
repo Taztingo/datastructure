@@ -1,13 +1,7 @@
 #ifndef __MY_CBUFF_ITERATOR__
 	#define __MY_CBUFF_ITERATOR__
 
-	#ifndef size_t
-		#define size_t unsigned int
-	#endif
-
-	#ifndef ptrdiff_t
-		#define ptrdiff_t int
-	#endif
+	#include <cstdlib>
 
 	template <typename T>
 	class MyCBuffIterator {

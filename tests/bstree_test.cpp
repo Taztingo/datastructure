@@ -4,7 +4,6 @@ using namespace std;
 
 int main() {
 	MyBSTree<int> tree;
-
 	tree.add(50);
 	tree.add(20);
 	tree.add(70);

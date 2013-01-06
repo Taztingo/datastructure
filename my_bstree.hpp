@@ -38,6 +38,8 @@
 	/////////////////////////////////
 
 	/////////////////////////////////
+	using namespace std;
+	#include <iostream>
 	template <typename T>
 	void MyBSTree<T>::add(T elem, MyNode<T>* pos) {
 		if(root_ == NULL)

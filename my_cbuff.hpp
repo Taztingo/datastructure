@@ -1,14 +1,7 @@
 #ifndef __MY_CBUFF__
 	#define __MY_CBUFF__
 
-	#ifndef size_t
-		#define size_t unsigned int
-	#endif
-
-	#ifndef ptrdiff_t
-		#define ptrdiff_t int
-	#endif
-
+	#include "cstdlib"
 	#include "my_cbuff_iterator.hpp"
 
 	template <typename T>
