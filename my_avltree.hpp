@@ -10,10 +10,10 @@
 			void	add_node(MyNode<T>*, MyNode<T>*);
 			int		height_helper(MyNode<T>*);
 			void	balance(MyNode<T>*);
-			void	rr_rotation(MyNode<T>* grand_parent, MyNode<T>* parent, MyNode<T>* child);
-			void	ll_rotation(MyNode<T>* grand_parent, MyNode<T>* parent, MyNode<T>* child);
-			void	rl_rotation(MyNode<T>* grand_parent, MyNode<T>* parent, MyNode<T>* child);
-			void	lr_rotation(MyNode<T>* grand_parent, MyNode<T>* parent, MyNode<T>* child);
+			void	rr_rotation(MyNode<T>*);
+			void	ll_rotation(MyNode<T>*);
+			void	rl_rotation(MyNode<T>*);
+			void	lr_rotation(MyNode<T>*);
 			
 		public:
 			MyAVLTree();
@@ -28,6 +28,108 @@
 			int  	height();
 	};
 
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::delete_node(MyNode<T>* node, MyNode<T>* prev_node, MyNode<T>* new_val, bool move_node) {
+		MyNode<T>* temp;
+		if(node == root_)
+			root_ = new_val;
+		else {
+			//Set left side of parent to new child
+			if(prev_node->getLeft() && prev_node->getLeft()->getData() == node->getData()) 
+				prev_node->setLeft(new_val);
+
+			//Set right side of parent to new child
+			else if(prev_node->getRight() && prev_node->getRight()->getData() == node->getData()) 
+				prev_node->setRight(new_val);
+		}
+		if(move_node) {
+			temp = new_val->getRight();
+			new_val->setRight(node->getRight());
+			add_node(new_val, temp);
+		}
+		delete node;
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::add_node(MyNode<T>* parent, MyNode<T>* new_node) {
+		if(parent && new_node) {
+			//Left side
+			if(new_node->getData() <= parent->getData()) {
+				if(parent->getLeft())
+					add_node(parent->getLeft(), new_node);
+				else
+					parent->setLeft(new_node);
+			}
+			//Right side
+			else {
+				if(parent->getRight())
+					add_node(parent->getRight(), new_node);
+				else
+					parent->setRight(new_node);
+			}
+		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	int MyAVLTree<T>::height_helper(MyNode<T>* node) {
+		if(node == NULL)
+			return 0;
+		else {
+			int left = height_helper(node->getLeft());
+			int right = height_helper(node->getRight());
+
+			if(left >= right)
+				return left + 1;
+			else
+				return right + 1;
+		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::balance(MyNode<T>*) {
+
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::rr_rotation(MyNode<T>* node) {
+		
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::ll_rotation(MyNode<T>* node) {
+		//grand_parent->setLeft(parent->getRight());
+		//parent->setLeft(child);
+		//parent->setRight(grand_parent);
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::rl_rotation(MyNode<T>* node) {
+		//grand_parent->setLeft(parent->getRight());
+		//parent->setLeft(child);
+		//parent->setRight(grand_parent);
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::lr_rotation(MyNode<T>* node) {
+
+	}
+	/////////////////////////////////
+	
 	/////////////////////////////////
 	template <typename T>
 	MyAVLTree<T>::MyAVLTree() {
@@ -78,57 +180,6 @@
 
 	/////////////////////////////////
 	template <typename T>
-	void MyAVLTree<T>::add_node(MyNode<T>* parent, MyNode<T>* new_node) {
-		if(parent && new_node) {
-			//Left side
-			if(new_node->getData() <= parent->getData()) {
-				if(parent->getLeft())
-					add_node(parent->getLeft(), new_node);
-				else
-					parent->setLeft(new_node);
-			}
-			//Right side
-			else {
-				if(parent->getRight())
-					add_node(parent->getRight(), new_node);
-				else
-					parent->setRight(new_node);
-			}
-		}
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	#include <iostream>
-	using namespace std;
-	template <typename T>
-	void MyAVLTree<T>::delete_node(MyNode<T>* node, MyNode<T>* prev_node, MyNode<T>* new_val, bool move_node) {
-		MyNode<T>* temp;
-		if(node == root_)
-			root_ = new_val;
-		else {
-			//Set left side of parent to new child
-			if(prev_node->getLeft() && prev_node->getLeft()->getData() == node->getData()) 
-				prev_node->setLeft(new_val);
-
-			//Set right side of parent to new child
-			else if(prev_node->getRight() && prev_node->getRight()->getData() == node->getData()) 
-				prev_node->setRight(new_val);
-		}
-		if(move_node) {
-			temp = new_val->getRight();
-			new_val->setRight(node->getRight());
-			add_node(new_val, temp);
-		}
-		delete node;
-	}
-	/////////////////////////////////
-
-	
-	/////////////////////////////////
-	#include <iostream>
-	using namespace std;
-	template <typename T>
 	void MyAVLTree<T>::remove(T elem, MyNode<T>* node, MyNode<T>* prev_node) {
 		if(!node)
 			node = root_;
@@ -176,6 +227,7 @@
 		}
 	}
 	/////////////////////////////////
+	
 	/////////////////////////////////
 	#include <iostream>
 	template <typename T>
@@ -264,22 +316,4 @@
 		return height_helper(root_);
 	}
 	/////////////////////////////////
-
-	/////////////////////////////////
-	template <typename T>
-	int MyAVLTree<T>::height_helper(MyNode<T>* node) {
-		if(node == NULL)
-			return 0;
-		else {
-			int left = height_helper(node->getLeft());
-			int right = height_helper(node->getRight());
-
-			if(left >= right)
-				return left + 1;
-			else
-				return right + 1;
-		}
-	}
-	/////////////////////////////////
-
 #endif

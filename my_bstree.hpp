@@ -18,6 +18,8 @@
 			void	preorder(MyNode<T>* = NULL);
 			void 	inorder(MyNode<T>* = NULL);
 			void 	postorder(MyNode<T>* = NULL);
+			void 	dfs();
+			void 	bfs();
 			void 	clear(MyNode<T>*  = NULL);
 			bool 	exists(T, MyNode<T>* = NULL);
 			int  	height();
@@ -171,6 +173,7 @@
 		}
 	}
 	/////////////////////////////////
+	
 	/////////////////////////////////
 	#include <iostream>
 	template <typename T>
@@ -206,6 +209,22 @@
 			
 			std::cout << node->getData() << " ";	
 		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyBSTree<T>::dfs() {
+
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	#include <my_queue.hpp>
+	void MyBSTree<T>::bfs() {
+		
+
 	}
 	/////////////////////////////////
 	

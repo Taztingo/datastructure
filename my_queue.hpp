@@ -3,72 +3,72 @@
 
 	#include "my_list.hpp"
 
-	template <typename T>
+	template <typename Q>
 	class MyQueue {
 		private:
-			MyList<T>* queue;
+			MyList<Q>* queue;
 		public:
 						MyQueue();
 						~MyQueue();
 			bool 	empty();
 			int 	size();
-			T* 		front() const;
-			T* 		back() const;
-			void 	push(T);
+			Q* 		front() const;
+			Q* 		back() const;
+			void 	push(Q);
 			void 	pop();
 	};
 
 	/////////////////////////////////
-	template <typename T>
-	MyQueue<T>::MyQueue() {
-		queue = new MyList<T>();
+	template <typename Q>
+	MyQueue<Q>::MyQueue() {
+		queue = new MyList<Q>();
 	}
 	/////////////////////////////////
-	template <typename T>
-	MyQueue<T>::~MyQueue() {
+	template <typename Q>
+	MyQueue<Q>::~MyQueue() {
 		delete queue;
 		queue = NULL;
 	}
 	/////////////////////////////////
 	
 	/////////////////////////////////
-	template <typename T>
-	bool MyQueue<T>::empty() {
+	template <typename Q>
+	bool MyQueue<Q>::empty() {
 		return queue->empty();
 	}
 	/////////////////////////////////
 	
 	/////////////////////////////////
-	template <typename T>
-	int MyQueue<T>::size() {
+	template <typename Q>
+	int MyQueue<Q>::size() {
 		return queue->size();
 	}
 	/////////////////////////////////
 	
 	/////////////////////////////////
-	template <typename T>
-	T* MyQueue<T>::front() const {
+	template <typename Q>
+	Q* MyQueue<Q>::front() const {
 		return queue->front();
 	}
 	/////////////////////////////////
 	
 	/////////////////////////////////
-	template <typename T>
-	T* MyQueue<T>::back() const {
+	template <typename Q>
+	Q* MyQueue<Q>::back() const {
 		return queue->back();
 	}
 	/////////////////////////////////
 	
 	/////////////////////////////////
-	template <typename T>
-	void MyQueue<T>::push(T data) {
+	template <typename Q>
+	void MyQueue<Q>::push(Q data) {
 		queue->push_back(data);
 	}
 	/////////////////////////////////
 
 	/////////////////////////////////
-	template <typename T>
-	void MyQueue<T>::pop() {
+	template <typename Q>
+	void MyQueue<Q>::pop() {
 		queue->pop_front();
 	}
 	/////////////////////////////////

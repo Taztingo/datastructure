@@ -7,11 +7,11 @@
 
 	#include "my_node.hpp"
 
-	template <typename T>
+	template <typename G>
 	class MyList {
 		private:
-			MyNode<T>* head;
-			MyNode<T>* tail;
+			MyNode<G>* head;
+			MyNode<G>* tail;
 			
 			void traverse();
 			void reverse_traverse();
@@ -20,35 +20,35 @@
 			~MyList();
 			bool empty();
 			int size();
-			T* front() const;
-			T* back() const;
-			void push_front(T);
+			G* front() const;
+			G* back() const;
+			void push_front(G);
 			void pop_front();
-			void push_back(T);
+			void push_back(G);
 			void pop_back();
-			void insert(int, int, T);
+			void insert(int, int, G);
 			void erase(int, int);
 			void erase_at(int);
-			void swap(MyList<T>*);	
+			void swap(MyList<G>*);	
 			void clear();
-			void remove(T);
+			void remove(G);
 			void unique();
-			void merge(MyList<T>*);
+			void merge(MyList<G>*);
 			//void sort();	//Removed because it uses iterators
 			void reverse();
-			void operator=(MyList<T>);	//This needs to be fixed
-			void set_head(MyNode<T>*);
-			void set_tail(MyNode<T>*);
-			MyNode<T>* get_head();
-			MyNode<T>* get_tail();
+			void operator=(MyList<G>);	//Ghis needs to be fixed
+			void set_head(MyNode<G>*);
+			void set_tail(MyNode<G>*);
+			MyNode<G>* get_head();
+			MyNode<G>* get_tail();
 	};
 /////////////////////////////////
 	#include <iostream>
 	using namespace std;
 
-	template <typename T>
-	void MyList<T>::traverse() {
-		MyNode<T>* temp;
+	template <typename G>
+	void MyList<G>::traverse() {
+		MyNode<G>* temp;
 
 		temp = head;
 		while(temp) {
@@ -62,9 +62,9 @@
 	#include <iostream>
 	using namespace std;
 
-	template <typename T>
-	void MyList<T>::reverse_traverse() {
-		MyNode<T>* temp;
+	template <typename G>
+	void MyList<G>::reverse_traverse() {
+		MyNode<G>* temp;
 
 		temp = tail;
 		while(temp) {
@@ -74,19 +74,19 @@
 		cout << "\n";
 	}
 /////////////////////////////////
-	template <typename T>
-	MyList<T>::MyList() {
+	template <typename G>
+	MyList<G>::MyList() {
 		head = NULL;
 		tail = NULL;
 	}
 /////////////////////////////////
-	template <typename T>
-	MyList<T>::~MyList() {
+	template <typename G>
+	MyList<G>::~MyList() {
 		clear();
 	}
 /////////////////////////////////
-	template <typename T>
-	bool MyList<T>::empty() {
+	template <typename G>
+	bool MyList<G>::empty() {
 		bool ret;
 
 		ret = true;
@@ -96,10 +96,10 @@
 		return ret;
 	}
 /////////////////////////////////
-	template <typename T>
-	int MyList<T>::size() {
+	template <typename G>
+	int MyList<G>::size() {
 		int size;
-		MyNode<T>* temp;
+		MyNode<G>* temp;
 
 		size = 0;
 		for(temp = head; temp; temp = temp->getNext())
@@ -108,27 +108,27 @@
 		return size;
 	}
 /////////////////////////////////
-	template <typename T>
-	T* MyList<T>::front() const {
+	template <typename G>
+	G* MyList<G>::front() const {
 		if(head)
 			return &(head->getData());
 		else
 			return NULL;
 	}
 /////////////////////////////////
-	template <typename T>
-	T* MyList<T>::back() const{
+	template <typename G>
+	G* MyList<G>::back() const{
 		if(tail)
 			return &(tail->getData());
 		else
 			return NULL;
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::push_front(T value) {
-		MyNode<T>* new_node;
+	template <typename G>
+	void MyList<G>::push_front(G value) {
+		MyNode<G>* new_node;
 
-		new_node = new MyNode<T>(value, head, NULL);
+		new_node = new MyNode<G>(value, head, NULL);
 
 		//Set tail since size is 1
 		if(!head) {
@@ -141,9 +141,9 @@
 		head = new_node;
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::pop_front() {
-		MyNode<T>* temp;
+	template <typename G>
+	void MyList<G>::pop_front() {
+		MyNode<G>* temp;
 
 		if(head) {
 			temp = head->getNext();
@@ -162,11 +162,11 @@
 
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::push_back(T val) {
-		MyNode<T>* new_node;
+	template <typename G>
+	void MyList<G>::push_back(G val) {
+		MyNode<G>* new_node;
 
-		new_node = new MyNode<T>(val, NULL, tail);
+		new_node = new MyNode<G>(val, NULL, tail);
 
 		if(!head)
 			head = new_node;
@@ -176,9 +176,9 @@
 		tail = new_node;
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::pop_back() {
-		MyNode<T>* temp;
+	template <typename G>
+	void MyList<G>::pop_back() {
+		MyNode<G>* temp;
 
 		if(tail) {
 			temp = tail->getPrevious();
@@ -196,11 +196,11 @@
 		}
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::insert(int position, int num_elements, T value) {
-		MyNode<T>* current;
-		MyNode<T>* previous;
-		MyNode<T>* new_node;
+	template <typename G>
+	void MyList<G>::insert(int position, int num_elements, G value) {
+		MyNode<G>* current;
+		MyNode<G>* previous;
+		MyNode<G>* new_node;
 
 		current = head;
 		previous = NULL;
@@ -223,7 +223,7 @@
 		//Insert in middle
 		else {
 			while(num_elements > 0) {
-				new_node = new MyNode<T>(value, current, previous);
+				new_node = new MyNode<G>(value, current, previous);
 				previous->setNext(new_node);
 				current->setPrevious(new_node);
 				previous = new_node;
@@ -232,8 +232,8 @@
 		}
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::erase(int start, int end) {
+	template <typename G>
+	void MyList<G>::erase(int start, int end) {
 		int distance;
 
 		if(start < 0)
@@ -246,10 +246,10 @@
 		}
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::erase_at(int position) {
-		MyNode<T>* current;
-		MyNode<T>* previous;
+	template <typename G>
+	void MyList<G>::erase_at(int position) {
+		MyNode<G>* current;
+		MyNode<G>* previous;
 
 		if(position < 0)
 			position = 0;
@@ -280,12 +280,12 @@
 		}
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::swap(MyList<T>* other_list) {
-		MyNode<T>* this_head = head;
-		MyNode<T>* this_tail = tail;
-		MyNode<T>* other_head = other_list->get_head();
-		MyNode<T>* other_tail = other_list->get_tail();
+	template <typename G>
+	void MyList<G>::swap(MyList<G>* other_list) {
+		MyNode<G>* this_head = head;
+		MyNode<G>* this_tail = tail;
+		MyNode<G>* other_head = other_list->get_head();
+		MyNode<G>* other_tail = other_list->get_tail();
 
 		set_head(other_head);
 		set_tail(other_tail);
@@ -294,9 +294,9 @@
 		other_list->set_tail(this_tail);
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::clear() {
-		MyNode<T>* temp;
+	template <typename G>
+	void MyList<G>::clear() {
+		MyNode<G>* temp;
 
 		while(head)
 		{
@@ -308,10 +308,10 @@
 		tail = NULL;
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::remove(T value) {
+	template <typename G>
+	void MyList<G>::remove(G value) {
 		int counter;
-		MyNode<T>* temp;
+		MyNode<G>* temp;
 
 		counter = 0;
 		temp = head;
@@ -325,11 +325,11 @@
 		}
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::unique() {
-		MyNode<T>* current;
-		MyNode<T>* previous;
-		MyNode<T>* next;
+	template <typename G>
+	void MyList<G>::unique() {
+		MyNode<G>* current;
+		MyNode<G>* previous;
+		MyNode<G>* next;
 
 		current = head;
 		while(current) {
@@ -349,10 +349,10 @@
 		}
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::merge(MyList<T>* merged_list) {
-		MyNode<T>* this_current;
-		MyNode<T>* other_current;
+	template <typename G>
+	void MyList<G>::merge(MyList<G>* merged_list) {
+		MyNode<G>* this_current;
+		MyNode<G>* other_current;
 		int counter;
 
 		this_current = head;
@@ -406,10 +406,10 @@ void MyList::sort() {
 }*/
 
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::reverse() {
-		MyNode<T>* temp_tail;
-		MyNode<T>* original_tail;
+	template <typename G>
+	void MyList<G>::reverse() {
+		MyNode<G>* temp_tail;
+		MyNode<G>* original_tail;
 
 		//Pushes everything behind the tail
 		temp_tail = tail;
@@ -426,9 +426,9 @@ void MyList::sort() {
 			pop_front();
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::operator=(MyList<T> new_list) {
-		MyNode<T>* temp;
+	template <typename G>
+	void MyList<G>::operator=(MyList<G> new_list) {
+		MyNode<G>* temp;
 		clear();
 	
 		temp = new_list.front();
@@ -439,23 +439,23 @@ void MyList::sort() {
 		}
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::set_head(MyNode<T>* new_head) {
+	template <typename G>
+	void MyList<G>::set_head(MyNode<G>* new_head) {
 			head = new_head;
 	}
 /////////////////////////////////
-	template <typename T>
-	void MyList<T>::set_tail(MyNode<T>* new_tail) {
+	template <typename G>
+	void MyList<G>::set_tail(MyNode<G>* new_tail) {
 		tail = new_tail;
 	}
 /////////////////////////////////
-	template <typename T>
-		MyNode<T>* MyList<T>::get_head() {
+	template <typename G>
+		MyNode<G>* MyList<G>::get_head() {
 			return head;
 		}
 /////////////////////////////////
-	template <typename T>
-		MyNode<T>* MyList<T>::get_tail() {
+	template <typename G>
+		MyNode<G>* MyList<G>::get_tail() {
 			return tail;
 		}
 /////////////////////////////////
