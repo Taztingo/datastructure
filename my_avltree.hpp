@@ -6,20 +6,26 @@
 	class MyAVLTree {
 		private:
 			MyNode<T>* root_;
-			void	delete_node(MyNode<T>*, MyNode<T>*, MyNode<T>*, bool = false);
-			void	add_node(MyNode<T>*, MyNode<T>*);
-			int		height_helper(MyNode<T>*);
-			void	balance(MyNode<T>*);
-			void	rr_rotation(MyNode<T>*);
-			void	ll_rotation(MyNode<T>*);
-			void	rl_rotation(MyNode<T>*);
-			void	lr_rotation(MyNode<T>*);
+
+			void				delete_node(MyNode<T>*, MyNode<T>*, MyNode<T>*, bool = false);
+			void				add_node(MyNode<T>*, MyNode<T>*);
+			void				add_helper(T, MyNode<T>*);
+			void				remove_helper(T, MyNode<T>*, MyNode<T>*);
+			int					height_helper(MyNode<T>*);
+			MyNode<T>*	get_parent(MyNode<T>*, MyNode<T>*);
+			void				balance(MyNode<T>*);
+			void				rotate_right(MyNode<T>*);
+			void				rotate_left(MyNode<T>*);
+			void				rr_rotation(MyNode<T>*);
+			void				ll_rotation(MyNode<T>*);
+			void				rl_rotation(MyNode<T>*);
+			void				lr_rotation(MyNode<T>*);
 			
 		public:
 			MyAVLTree();
 			~MyAVLTree();
-			void 	add(T, MyNode<T>* = NULL);
-			void 	remove(T, MyNode<T>* = NULL, MyNode<T>* = NULL);
+			void 	add(T);
+			void 	remove(T);
 			void	preorder(MyNode<T>* = NULL);
 			void 	inorder(MyNode<T>* = NULL);
 			void 	postorder(MyNode<T>* = NULL);
@@ -75,85 +81,12 @@
 	/////////////////////////////////
 	
 	/////////////////////////////////
-	template <typename T>
-	int MyAVLTree<T>::height_helper(MyNode<T>* node) {
-		if(node == NULL)
-			return 0;
-		else {
-			int left = height_helper(node->getLeft());
-			int right = height_helper(node->getRight());
+	template<typename T>
+	void MyAVLTree<T>::add_helper(T elem, MyNode<T>* pos) {
 
-			if(left >= right)
-				return left + 1;
-			else
-				return right + 1;
-		}
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
-	void MyAVLTree<T>::balance(MyNode<T>*) {
-
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
-	void MyAVLTree<T>::rr_rotation(MyNode<T>* node) {
-		
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
-	void MyAVLTree<T>::ll_rotation(MyNode<T>* node) {
-		//grand_parent->setLeft(parent->getRight());
-		//parent->setLeft(child);
-		//parent->setRight(grand_parent);
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
-	void MyAVLTree<T>::rl_rotation(MyNode<T>* node) {
-		//grand_parent->setLeft(parent->getRight());
-		//parent->setLeft(child);
-		//parent->setRight(grand_parent);
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
-	void MyAVLTree<T>::lr_rotation(MyNode<T>* node) {
-
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
-	MyAVLTree<T>::MyAVLTree() {
-		root_ = NULL;
-	}
-	/////////////////////////////////
-
-	/////////////////////////////////
-	template <typename T>
-	MyAVLTree<T>::~MyAVLTree() {
-			clear();
-	}
-	/////////////////////////////////
-
-	/////////////////////////////////
-	using namespace std;
-	#include <iostream>
-	template <typename T>
-	void MyAVLTree<T>::add(T elem, MyNode<T>* pos) {
 		if(root_ == NULL)
 			root_ = new MyNode<T>(elem, NULL, NULL);
 		else {
-			if(pos == NULL)
-				pos = root_;
 
 			//Left Branch
 			if(elem <= pos->getData()) {
@@ -162,7 +95,7 @@
 					pos->setLeft(new MyNode<T>(elem, NULL, NULL));
 				//Keep Searching if not null
 				else
-					add(elem, pos->getLeft());
+					add_helper(elem, pos->getLeft());
 			}
 
 			//Right Branch
@@ -172,17 +105,17 @@
 					pos->setRight(new MyNode<T>(elem, NULL, NULL));
 				//Keep Searching if not null
 				else
-					add(elem, pos->getRight());	
+					add_helper(elem, pos->getRight());	
 			}
 		}
 	}
 	/////////////////////////////////
-
+	
 	/////////////////////////////////
-	template <typename T>
-	void MyAVLTree<T>::remove(T elem, MyNode<T>* node, MyNode<T>* prev_node) {
+	template<typename T>
+	void MyAVLTree<T>::remove_helper(T elem, MyNode<T>* node, MyNode<T>* prev_node) {
 		if(!node)
-			node = root_;
+			return;
 		
 		//Found matching node
 		if(node->getData() == elem) {
@@ -201,11 +134,203 @@
 			}
 		}
 		else {
-			if(elem <= node->getData() && node->getLeft())
-				remove(elem, node->getLeft(), node);
-			if(elem > node->getData() && node->getRight())
-				remove(elem, node->getRight(), node);
+			if(elem <= node->getData())
+				remove_helper(elem, node->getLeft(), node);
+			if(elem > node->getData())
+				remove_helper(elem, node->getRight(), node);
 		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	int MyAVLTree<T>::height_helper(MyNode<T>* node) {
+		if(node == NULL)
+			return 0;
+		else {
+			int left = height_helper(node->getLeft());
+			int right = height_helper(node->getRight());
+
+			if(left >= right)
+				return left + 1;
+			else
+				return right + 1;
+		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	MyNode<T>* MyAVLTree<T>::get_parent(MyNode<T>* find_parent, MyNode<T>* node) {
+		MyNode<T>* left;
+		MyNode<T>* right;
+
+		if(node == NULL)
+			return NULL;
+
+		if(node->getLeft() == find_parent || node->getRight() == find_parent)
+			return node;
+
+		left = get_parent(find_parent, node->getLeft());
+		right = get_parent(find_parent, node->getRight());
+
+		if(left)
+			return left;
+		else
+			return right;
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::balance(MyNode<T>* node) {
+		MyNode<T>* child;
+		MyNode<T>* child_child;
+		bool side;
+		int tree_height;
+		int left_height;
+		int right_height;
+
+		if(node) {
+			left_height = height_helper(node->getLeft());
+			right_height = height_helper(node->getRight());
+			tree_height = left_height - right_height;
+
+			if(tree_height == 2) {
+				child = node->getLeft();
+				side = false;
+			}
+			else if(tree_height == -2) {
+				child = node->getRight();
+				side = true;
+			}
+			else {
+				balance(node->getLeft());
+				balance(node->getRight());
+				return;
+			}
+				
+			if(child->getLeft()) {
+				if(child->getLeft()->getLeft())
+					ll_rotation(node);
+				else
+					lr_rotation(node);
+			}
+			else {
+				if(child->getLeft()->getLeft())
+					rl_rotation(node);
+				else
+					rr_rotation(node);
+			}
+
+		}
+	}
+	/////////////////////////////////
+
+
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::rotate_right(MyNode<T>* node) {
+		MyNode<T>* new_top;
+		MyNode<T>* parent;
+		
+		new_top = node->getLeft();
+		node->setLeft(new_top->getRight());
+		new_top->setRight(node);
+
+		//Fix parent of node being rotated only if node is not root
+		if(root_ == node)
+			root_ = new_top;
+		else {
+			parent = get_parent(node, root_);
+			if(parent->getLeft() == node)
+				parent->setLeft(new_top);
+			else
+				parent->setRight(new_top);
+		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::rotate_left(MyNode<T>* node) {
+		MyNode<T>* new_top;
+		MyNode<T>* parent;
+		
+		new_top = node->getRight();
+		node->setRight(new_top->getLeft());
+		new_top->setLeft(node);
+
+		//Fix parent of node being rotated only if node is not root
+		if(root_ == node)
+			root_ = new_top;
+		else {
+			parent = get_parent(node, root_);
+			if(parent->getLeft() == node)
+				parent->setLeft(new_top);
+			else
+				parent->setRight(new_top);
+		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::rr_rotation(MyNode<T>* node) {
+		rotate_left(node);
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::ll_rotation(MyNode<T>* node) {
+		rotate_right(node);	
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::rl_rotation(MyNode<T>* node) {
+		rotate_right(node->getRight());
+		rotate_left(node);
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::lr_rotation(MyNode<T>* node) {
+		rotate_left(node->getLeft());
+		rotate_right(node);
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	MyAVLTree<T>::MyAVLTree() {
+		root_ = NULL;
+	}
+	/////////////////////////////////
+
+	/////////////////////////////////
+	template <typename T>
+	MyAVLTree<T>::~MyAVLTree() {
+			clear();
+	}
+	/////////////////////////////////
+
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::add(T elem) {
+		add_helper(elem, root_);
+		balance(root_);
+	}
+	/////////////////////////////////
+
+	/////////////////////////////////
+	template <typename T>
+	void MyAVLTree<T>::remove(T elem) {
+		remove_helper(elem, root_, NULL);
+		balance(root_);
 	}
 	/////////////////////////////////
 	

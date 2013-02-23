@@ -6,73 +6,54 @@
 	class MyBSTree {
 		private:
 			MyNode<T>* root_;
-			void	delete_node(MyNode<T>*, MyNode<T>*, MyNode<T>*, bool = false);
-			void	add_node(MyNode<T>*, MyNode<T>*);
-			int		height_helper(MyNode<T>*);
+
+			void				delete_node(MyNode<T>*, MyNode<T>*, MyNode<T>*, bool = false);
+			void				add_node(MyNode<T>*, MyNode<T>*);
+			void				add_helper(T, MyNode<T>*);
+			void				remove_helper(T, MyNode<T>*, MyNode<T>*);
+			int					height_helper(MyNode<T>*);
+			void				dfs_helper(MyNode<T>*);
+			void				bfs_helper(MyNode<T>*);
 			
 		public:
 			MyBSTree();
 			~MyBSTree();
-			void 	add(T, MyNode<T>* = NULL);
-			void 	remove(T, MyNode<T>* = NULL, MyNode<T>* = NULL);
+			void 	add(T);
+			void 	remove(T);
 			void	preorder(MyNode<T>* = NULL);
 			void 	inorder(MyNode<T>* = NULL);
 			void 	postorder(MyNode<T>* = NULL);
-			void 	dfs();
-			void 	bfs();
 			void 	clear(MyNode<T>*  = NULL);
 			bool 	exists(T, MyNode<T>* = NULL);
 			int  	height();
+			void	dfs();
+			void 	bfs();
 	};
 
 	/////////////////////////////////
 	template <typename T>
-	MyBSTree<T>::MyBSTree() {
-		root_ = NULL;
-	}
-	/////////////////////////////////
-
-	/////////////////////////////////
-	template <typename T>
-	MyBSTree<T>::~MyBSTree() {
-			clear();
-	}
-	/////////////////////////////////
-
-	/////////////////////////////////
-	using namespace std;
-	#include <iostream>
-	template <typename T>
-	void MyBSTree<T>::add(T elem, MyNode<T>* pos) {
-		if(root_ == NULL)
-			root_ = new MyNode<T>(elem, NULL, NULL);
+	void MyBSTree<T>::delete_node(MyNode<T>* node, MyNode<T>* prev_node, MyNode<T>* new_val, bool move_node) {
+		MyNode<T>* temp;
+		if(node == root_)
+			root_ = new_val;
 		else {
-			if(pos == NULL)
-				pos = root_;
+			//Set left side of parent to new child
+			if(prev_node->getLeft() && prev_node->getLeft()->getData() == node->getData()) 
+				prev_node->setLeft(new_val);
 
-			//Left Branch
-			if(elem <= pos->getData()) {
-				//If left is null add
-				if(pos->getLeft() == NULL) 
-					pos->setLeft(new MyNode<T>(elem, NULL, NULL));
-				//Keep Searching if not null
-				else
-					add(elem, pos->getLeft());
-			}
-
-			//Right Branch
-			else {
-				//If right is null add
-				if(pos->getRight() == NULL) 
-					pos->setRight(new MyNode<T>(elem, NULL, NULL));
-				//Keep Searching if not null
-				else
-					add(elem, pos->getRight());	
-			}
+			//Set right side of parent to new child
+			else if(prev_node->getRight() && prev_node->getRight()->getData() == node->getData()) 
+				prev_node->setRight(new_val);
 		}
+		if(move_node) {
+			temp = new_val->getRight();
+			new_val->setRight(node->getRight());
+			add_node(new_val, temp);
+		}
+		delete node;
 	}
 	/////////////////////////////////
-
+	
 	/////////////////////////////////
 	template <typename T>
 	void MyBSTree<T>::add_node(MyNode<T>* parent, MyNode<T>* new_node) {
@@ -96,39 +77,41 @@
 	/////////////////////////////////
 	
 	/////////////////////////////////
-	#include <iostream>
-	using namespace std;
-	template <typename T>
-	void MyBSTree<T>::delete_node(MyNode<T>* node, MyNode<T>* prev_node, MyNode<T>* new_val, bool move_node) {
-		MyNode<T>* temp;
-		if(node == root_)
-			root_ = new_val;
-		else {
-			//Set left side of parent to new child
-			if(prev_node->getLeft() && prev_node->getLeft()->getData() == node->getData()) 
-				prev_node->setLeft(new_val);
+	template<typename T>
+	void MyBSTree<T>::add_helper(T elem, MyNode<T>* pos) {
 
-			//Set right side of parent to new child
-			else if(prev_node->getRight() && prev_node->getRight()->getData() == node->getData()) 
-				prev_node->setRight(new_val);
+		if(root_ == NULL)
+			root_ = new MyNode<T>(elem, NULL, NULL);
+		else {
+
+			//Left Branch
+			if(elem <= pos->getData()) {
+				//If left is null add
+				if(pos->getLeft() == NULL) 
+					pos->setLeft(new MyNode<T>(elem, NULL, NULL));
+				//Keep Searching if not null
+				else
+					add_helper(elem, pos->getLeft());
+			}
+
+			//Right Branch
+			else {
+				//If right is null add
+				if(pos->getRight() == NULL) 
+					pos->setRight(new MyNode<T>(elem, NULL, NULL));
+				//Keep Searching if not null
+				else
+					add_helper(elem, pos->getRight());	
+			}
 		}
-		if(move_node) {
-			temp = new_val->getRight();
-			new_val->setRight(node->getRight());
-			add_node(new_val, temp);
-		}
-		delete node;
 	}
 	/////////////////////////////////
-
 	
 	/////////////////////////////////
-	#include <iostream>
-	using namespace std;
-	template <typename T>
-	void MyBSTree<T>::remove(T elem, MyNode<T>* node, MyNode<T>* prev_node) {
+	template<typename T>
+	void MyBSTree<T>::remove_helper(T elem, MyNode<T>* node, MyNode<T>* prev_node) {
 		if(!node)
-			node = root_;
+			return;
 		
 		//Found matching node
 		if(node->getData() == elem) {
@@ -147,11 +130,58 @@
 			}
 		}
 		else {
-			if(elem <= node->getData() && node->getLeft())
-				remove(elem, node->getLeft(), node);
-			if(elem > node->getData() && node->getRight())
-				remove(elem, node->getRight(), node);
+			if(elem <= node->getData())
+				remove_helper(elem, node->getLeft(), node);
+			if(elem > node->getData())
+				remove_helper(elem, node->getRight(), node);
 		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	int MyBSTree<T>::height_helper(MyNode<T>* node) {
+		if(node == NULL)
+			return 0;
+		else {
+			int left = height_helper(node->getLeft());
+			int right = height_helper(node->getRight());
+
+			if(left >= right)
+				return left + 1;
+			else
+				return right + 1;
+		}
+	}
+	/////////////////////////////////
+	
+	/////////////////////////////////
+	template <typename T>
+	MyBSTree<T>::MyBSTree() {
+		root_ = NULL;
+	}
+	/////////////////////////////////
+
+	/////////////////////////////////
+	template <typename T>
+	MyBSTree<T>::~MyBSTree() {
+			clear();
+	}
+	/////////////////////////////////
+
+	/////////////////////////////////
+	using namespace std;
+	#include <iostream>
+	template <typename T>
+	void MyBSTree<T>::add(T elem) {
+		add_helper(elem, root_);
+	}
+	/////////////////////////////////
+
+	/////////////////////////////////
+	template <typename T>
+	void MyBSTree<T>::remove(T elem) {
+		remove_helper(elem, root_, NULL);
 	}
 	/////////////////////////////////
 	
@@ -214,22 +244,6 @@
 	
 	/////////////////////////////////
 	template <typename T>
-	void MyBSTree<T>::dfs() {
-
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
-	#include <my_queue.hpp>
-	void MyBSTree<T>::bfs() {
-		
-
-	}
-	/////////////////////////////////
-	
-	/////////////////////////////////
-	template <typename T>
 	void MyBSTree<T>::clear(MyNode<T>* node) {
 		MyNode<T>* left;
 		MyNode<T>* right;
@@ -278,22 +292,18 @@
 		return height_helper(root_);
 	}
 	/////////////////////////////////
-
+	
 	/////////////////////////////////
 	template <typename T>
-	int MyBSTree<T>::height_helper(MyNode<T>* node) {
-		if(node == NULL)
-			return 0;
-		else {
-			int left = height_helper(node->getLeft());
-			int right = height_helper(node->getRight());
-
-			if(left >= right)
-				return left + 1;
-			else
-				return right + 1;
-		}
+	void MyBSTree<T>::dfs() {
+		dfs_helper(root_);
 	}
 	/////////////////////////////////
-
+	
+	/////////////////////////////////
+	template <typename T>
+	void MyBSTree<T>::bfs() {
+		bfs_helper(root_);
+	}
+	/////////////////////////////////
 #endif
